@@ -2,12 +2,9 @@ import React, {Component} from 'react'
 import {Link, withRouter} from 'react-router-dom'
 
 import {backHost, bucketName} from '../../../../../constants'
+import SideMenu from "../../index";
 
 class Info extends Component {
-
-    state = {
-        subscription: this.props.data.subscription
-    }
 
     confirmSubscription = (obj, communityId, userId) => {
         var request = new XMLHttpRequest();
@@ -23,25 +20,28 @@ class Info extends Component {
     onSubscribeClick = () => {
         const {id} = this.props.match.params
         let request = new XMLHttpRequest();
-        const setState = () => {
-            const subscription = this.state.subscription ? null : true
-            this.setState({
-                subscription
-            })
-        }
+        const {updateState} = this.props
         request.onreadystatechange = function() {
             if (this.readyState === 4 && this.status === 200) {
-                setState()
+                updateState()
             }
         };
         request.open('GET', `${backHost}/communities/public/${id}/subscribe`, true);
         request.send();
     }
 
+    clickOnForms = () => {
+        setTimeout(() => {
+            document.getElementById('form34').focus();
+            document.getElementById('form10').focus();
+        }, 200);
+    }
+
     render() {
-        const {community, subscribers, avatar, currentUser, requests} = this.props.data
-        const className = !community.closed || (this.state.subscription != null && this.state.subscription.confirmed)
+        const {community, subscribers, avatar, currentUser, requests, subscription} = this.props.data
+        const className = !community.closed || (subscription != null && subscription.confirmed)
             ? 'card my-3 pb-0' : 'card mb-3 pb-0'
+
 
         return (
             <div className="col-3">
@@ -62,14 +62,12 @@ class Info extends Component {
                             <div className="dropdown">
                                 {
                                     currentUser.id !== community.admin.id ? (
-                                        <button className="btn btn-outline-primary btn-rounded dropdown-toggle" type="button"
-                                                id="dropdownMenu1" data-toggle="dropdown"
-                                                aria-haspopup="true" aria-expanded="false">
+                                        <button className="btn btn-outline-primary btn-rounded dropdown-toggle" type="button" onClick={this.onSubscribeClick}>
                                             {
-                                                this.state.subscription != null ? (
-                                                    <span>Вы подписаны</span>
+                                                subscription != null ? (
+                                                    <span >Вы подписаны</span>
                                                 ) : (
-                                                    <span onClick={this.onSubscribeClick}>Подписаться</span>
+                                                    <span>Подписаться</span>
                                                 )
                                             }
                                         </button>
@@ -77,18 +75,11 @@ class Info extends Component {
                                 }
                                 {
                                     currentUser.id === community.admin.id ? (
-                                            <a onClick="clickOnForms()"
+                                            <a onClick={this.clickOnForms}
                                                className="btn btn-outline-primary btn-rounded" id="contact-tab" data-toggle="modal"
                                                data-target="#modalContactForm">Редактировать</a>
                                         ) : null
 
-                                }
-                                {
-                                    this.state.subscription != null ? (
-                                        <div className="text-center dropdown-menu dropdown-primary">
-                                            <a className="dropdown-item" href="#" onClick={this.onSubscribeClick}>Отписаться</a>
-                                        </div>
-                                    ) : null
                                 }
                             </div>
                         ) : null

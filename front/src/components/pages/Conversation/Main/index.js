@@ -32,10 +32,8 @@ class Main extends Component {
         textarea.value = ''
         const setState = (message) => {
             this.setState(({messages}) => {
-                let newMessages = Object.assign([], messages)
-                newMessages.unshift(JSON.parse(message))
                 return {
-                    messages: newMessages
+                    messages: [JSON.parse(message), ...messages]
                 }
             })
         }

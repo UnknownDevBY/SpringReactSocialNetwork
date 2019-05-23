@@ -1,8 +1,9 @@
 import React, {Component, Fragment} from 'react'
 import {Link, withRouter} from 'react-router-dom'
+import axios from 'axios'
 
 import Spinner from "../../Search/Main";
-import {bucketName} from "../../../../constants";
+import {bucketName, backHost} from "../../../../constants";
 
 class Main extends Component {
 
@@ -17,9 +18,8 @@ class Main extends Component {
     }
 
     onClick = (userId) => {
-        fetch(`/users/friendship/${userId}`).then(res => {
-                if(res.ok)
-                    this.props.updateState()
+        axios.get(`${backHost}/users/friendship/${userId}`).then(res => {
+                this.props.updateState()
             })
     }
 
@@ -35,6 +35,7 @@ class Main extends Component {
             )
 
         const {friends, subscribers, subscriptions, currentUser} = data
+
 
         return (
             <main className="messages-block">
@@ -92,10 +93,10 @@ class Main extends Component {
                                                     <div className="col-10 text-left">
                                                         <h2><Link to={`/users/${user.userId}`}>{user.userName} {user.userSurname}</Link></h2>
                                                         {
-                                                            currentUser != null && currentUser.id === id
+                                                            currentUser != null && currentUser.id == id
                                                                 ? (
                                                                     <Fragment>
-                                                                        <Link to={`/convesations/${user.userId}`}
+                                                                        <Link to={`/conversations/${user.userId}`}
                                                                               className="btn btn-sm btn-primary">Отправить сообщение</Link>
                                                                         <a onClick={() => this.onClick(user.userId)}
                                                                            className="btn btn-sm btn-primary">Удалить из друзей</a>
@@ -129,7 +130,7 @@ class Main extends Component {
                                                     <div className="col-10 text-left">
                                                         <h2><Link to={`/users/${user.userId}`}>{user.userName} {user.userSurname}</Link></h2>
                                                         {
-                                                            currentUser != null && currentUser.id === id
+                                                            currentUser != null && currentUser.id == id
                                                                 ? (
                                                                     <a onClick={() => this.onClick(user.userId)}
                                                                        className="btn btn-sm btn-primary">Добавить в друзья</a>
@@ -162,7 +163,7 @@ class Main extends Component {
                                                     <div className="col-10 text-left">
                                                         <h2><Link to={`/users/${user.userId}`}>{user.userName} {user.userSurname}</Link></h2>
                                                         {
-                                                            currentUser != null && currentUser.id === id
+                                                            currentUser != null && currentUser.id == id
                                                              ? (
                                                                     <a onClick={() => this.onClick(user.userId)}
                                                                        className="btn btn-sm btn-primary">Отписаться</a>

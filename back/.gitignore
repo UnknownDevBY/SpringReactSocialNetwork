@@ -6,4 +6,5 @@ uploads
 *.iml
 *.properties
 *.zip
+.git
 

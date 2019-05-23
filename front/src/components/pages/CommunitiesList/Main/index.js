@@ -38,7 +38,7 @@ class Main extends Component {
                                 <li className="nav-item">
                                     <a className="nav-link active" id="home-tab" data-toggle="tab" href="#home"
                                        role="tab" aria-controls="home" aria-selected="true">
-                                        Мои сообщества({myCommunities.length})
+                                        Мои сообщества ({myCommunities.length})
                                     </a>
                                 </li>
                                 <li className="nav-item">

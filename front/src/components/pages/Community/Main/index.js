@@ -4,6 +4,7 @@ import Spinner from '../../../Spinner'
 import Header from "./Header";
 import Info from "./Info";
 import Posts from "./Posts";
+import SideMenu from "../index";
 
 class Main extends Component {
 
@@ -22,7 +23,7 @@ class Main extends Component {
                 <div className="row justify-content-center">
                     <Header data={data}/>
                     <Posts data={data}/>
-                    <Info data={data}/>
+                    <Info updateState={this.props.updateState} data={data}/>
                 </div>
             </main>
         );

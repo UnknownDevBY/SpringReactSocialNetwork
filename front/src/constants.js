@@ -1,4 +1,5 @@
-const backHost = 'http://localhost:8080'
+const backHost = 'https://itech-social-back.herokuapp.com'
+//const backHost = 'http://localhost:8080'
 const bucketName = 'itech-social-bucket'
 
 const formatDate = (str) => {

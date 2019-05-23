@@ -193,7 +193,6 @@ em.logo {
     display: grid;
     overflow: hidden;
     grid-template-columns: repeat(3, 1fr);
-    border: 1px solid silver;
 }
 .friend {
     color: black;
@@ -549,7 +548,7 @@ em.logo {
 .news-photo-block {
     width: 60%;
     margin-left: 20%;
-    padding-top: 30px;
+    padding-top: 10px;
 }
 .albums {
     display: grid;
@@ -583,4 +582,17 @@ em.logo {
     .new-message, .convers-content {
         width: 80%;
     }
+}
+.map-container{
+    overflow:hidden;
+    padding-bottom:56.25%;
+    position:relative;
+    height:0;
+}
+.map-container iframe{
+    left:0;
+    top:0;
+    height:100%;
+    width:100%;
+    position:absolute;
 }

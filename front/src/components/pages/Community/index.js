@@ -36,7 +36,7 @@ class Community extends Component {
                 <Header updateState={this.updateState} data={data}/>
                 <SideMenu updateState={this.updateState} data={data}/>
                 <EditModal data={data}/>
-                <Main data={data}/>
+                <Main updateState={this.updateState} data={data}/>
             </Fragment>
         )
     }

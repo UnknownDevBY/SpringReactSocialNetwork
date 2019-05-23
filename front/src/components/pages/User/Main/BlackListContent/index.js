@@ -28,9 +28,9 @@ export default class BlackListContent extends Component {
                 <div className="avatar-block">
                     {
                         avatar == null ? (
-                            <img src="/bootstrap/img/no-avatar.png" alt=""/>
+                            <img src="/bootstrap/img/no-avatar.png" alt="" style={{width: '100%'}}/>
                         ) : (
-                            <img src={`https://s3.amazonaws.com/${bucketName}/${avatar.title}`} alt=""/>
+                            <img src={`https://s3.amazonaws.com/${bucketName}/${avatar.title}`} alt="" style={{width: '100%'}}/>
                         )
                     }
                 </div>

@@ -14,8 +14,10 @@ public class NewsDtoTransformer {
 
     public NewsDto toNewsDto(Photo photo, Post post, int currentUserId) {
         NewsDto newsDto = new NewsDto();
-        newsDto.setPhoto(photoDtoTransformer.toPhotoDto(photo, currentUserId));
-        newsDto.setPost(postDtoTransformer.toPostDto(post, currentUserId));
+        if(photo != null)
+            newsDto.setPhoto(photoDtoTransformer.toPhotoDto(photo, currentUserId));
+        if(post != null)
+            newsDto.setPost(postDtoTransformer.toPostDto(post, currentUserId));
         return newsDto;
     }
 }

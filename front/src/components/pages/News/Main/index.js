@@ -3,7 +3,7 @@ import {withRouter, Link} from 'react-router-dom'
 
 import Spinner from '../../../Spinner'
 import {bucketName, formatDate} from '../../../../constants'
-import LikeCommentPanel from "../../User/Main/NotBlackListContent/Posts";
+import LikeCommentPanel from "../../../reused/LikeCommentPanel";
 
 class Main extends Component {
 

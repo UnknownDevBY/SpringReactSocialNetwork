@@ -14,14 +14,18 @@ class Main extends Component {
         updateCount: 0
     }
 
-    del = (obj, type, id) => {
+    del = (obj, type, objId) => {
+        obj = obj.target
         var request = new XMLHttpRequest();
+        const {id} = this.props.match.params
         request.onreadystatechange = function() {
             if (this.readyState === 4 && this.status === 200) {
-                obj.parentNode.parentNode.parentNode.parentNode.hidden = true;
+                let commentsAmount = document.getElementById(`commentsAmount${id}`)
+                commentsAmount.innerHTML = parseInt(commentsAmount.innerHTML) - 1
+                obj.parentNode.parentNode.hidden = true;
             }
         };
-        request.open('GET', `${backHost}/delete/${type}/${id}`, true);
+        request.open('GET', `${backHost}/delete/${type}/${objId}`, true);
         request.send();
     }
 
@@ -41,19 +45,20 @@ class Main extends Component {
                 else setState('c', userId)
             }
         };
-        request.open('GET', `/delete/photo/${id}`, true);
+        request.open('GET', `${backHost}/delete/photo/${id}`, true);
         request.send();
     }
 
     newComment = (e, postId) => {
         e.preventDefault()
         let request = new XMLHttpRequest();
-        let textareaContent = document.querySelector("textarea[name=commentContent]").value
-        textareaContent = textareaContent.trim()
+        let textarea = document.getElementById('commentContent')
+        const {id} = this.props.match.params
+        let textareaContent = textarea.value.trim()
         const setState = (comment) => {
             this.setState(({comments}) => {
                 let newComments = Object.assign([], comments)
-                newComments.unshift(comment)
+                newComments.push(comment.comment)
                 return {
                     comments: newComments
                 }
@@ -63,7 +68,10 @@ class Main extends Component {
             var params = 'content=' + textareaContent;
             request.onreadystatechange = function () {
                 if (this.readyState === 4 && this.status === 200) {
-                    setState(request.response)
+                    textarea.value = ''
+                    let commentsAmount = document.getElementById(`commentsAmount${id}`)
+                    commentsAmount.innerHTML = parseInt(commentsAmount.innerHTML) + 1
+                    setState(JSON.parse(request.response))
                 }
             };
             request.open('POST', `${backHost}/comment/photo/${postId}`);
@@ -180,7 +188,7 @@ class Main extends Component {
                                 <div>
                                     <form className="form-sm row" onSubmit={e => this.newComment(e, photo.photo.id)}>
                                         <div className="col-7 form-group blue-border-focus pr-0">
-                                            <textarea placeholder="Ваш комментарий" name="commentContent" className="form-control form-control-sm" maxLength="255"
+                                            <textarea placeholder="Ваш комментарий" id="commentContent" name="commentContent" className="form-control form-control-sm" maxLength="255"
                                               minLength="1" required="required" rows="2"></textarea>
                                         </div>
                                         <div className="col-5 pl-0">

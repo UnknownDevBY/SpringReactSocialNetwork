@@ -31,7 +31,7 @@ export default class FriendsList extends Component {
                     Друзья: {friends.length}
                 </Link>
                 {
-                    !friends.length === 0 && (privacySettings.areFriendsAllowed) ? (
+                    friends.length !== 0 && (privacySettings.areFriendsAllowed) ? (
                         <div>
                             <div className="friends-block">
                                 {

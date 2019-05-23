@@ -48,6 +48,10 @@ class CreateCommunityModal extends Component {
         if(description)
             params.append('description', description)
         const {updateState} = this.props
+        document.getElementById("close").click()
+        let elem = document.querySelector('.modal-backdrop');
+        if(elem)
+            elem.parentNode.removeChild(elem);
         request.onreadystatechange = function() {
             if (this.readyState === 4) {
                 if(this.status === 200) {
@@ -57,12 +61,6 @@ class CreateCommunityModal extends Component {
         };
         request.open('POST', `${backHost}/communities/create`);
         request.send(params);
-    }
-
-    componentWillUnmount() {
-        let elem = document.querySelector('.modal-backdrop');
-        if(elem)
-            elem.parentNode.removeChild(elem);
     }
 
     render() {
@@ -75,7 +73,7 @@ class CreateCommunityModal extends Component {
                     <div className="modal-content">
                         <div className="modal-header text-center">
                             <h4 className="modal-title w-100 font-weight-bold">Создать группу</h4>
-                            <button type="button" className="close" data-dismiss="modal" aria-label="Close"
+                            <button type="button" id="close" className="close" data-dismiss="modal" aria-label="Close"
                                     onClick={this.resetForm}>
                                 <span aria-hidden="true">&times;</span>
                             </button>

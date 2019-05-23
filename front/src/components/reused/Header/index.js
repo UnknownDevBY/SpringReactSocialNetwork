@@ -8,8 +8,7 @@ class Header extends Component {
     onSubmit = e => {
         e.preventDefault()
         fetch(`${backHost}/logout`).then(res => {
-            if(res.ok)
-                this.props.updateState()
+            this.props.history.push('/')
         })
     }
 
