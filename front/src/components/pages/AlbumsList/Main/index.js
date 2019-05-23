@@ -28,7 +28,7 @@ class Main extends Component {
                                 <Link to={`/albums/${id}/0`}>
                                     <div className="view">
                                         {
-                                            defaultAlbum.photos ? (
+                                            defaultAlbum.photos.length !== 0 ? (
                                                 <div className="square img-fluid" style={{backgroundImage: `url(https://s3.amazonaws.com/${bucketName}/${defaultAlbum.photos[0].title})`}}></div>
                                             ) : (
                                                 <div className="square img-fluid" style={{backgroundImage: `url(/bootstrap/img/no-avatar.png)`}}></div>
@@ -47,7 +47,7 @@ class Main extends Component {
                                             <Link to={`/albums/${id}/${album.id}`}>
                                                 <div className="view">
                                                     {
-                                                        album.photos ? (
+                                                        album.photos.length !== 0 ? (
                                                             <div className="square img-fluid" style={{backgroundImage: `url(https://s3.amazonaws.com/${bucketName}/${album.photos[0].title})`}}></div>
                                                         ) : (
                                                             <div className="square img-fluid" style={{backgroundImage: `url(/bootstrap/img/no-avatar.png)`}}></div>

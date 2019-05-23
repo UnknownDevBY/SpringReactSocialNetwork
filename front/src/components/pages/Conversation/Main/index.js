@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {withRouter, Link} from 'react-router-dom'
 
 import Spinner from '../../../Spinner'
-import {backHost, bucketName, formatDate} from '../../../../constants'
+import {backHost, bucketName, formatDate, token} from '../../../../constants'
 import axios from 'axios'
 
 class Main extends Component {
@@ -46,12 +46,20 @@ class Main extends Component {
             };
             request.open('POST', `${backHost}/conversations/${id}`);
             request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            if(token.value)
+                request.setRequestHeader('Authorization', token.value)
             request.send(params);
         }
     }
 
     deleteMessage = (id) => {
-        axios.get(`${backHost}/delete/message/${id}`)
+        let header = {}
+        if(token.value)
+            header = {'Authorization': token.value}
+
+        axios.get(`${backHost}/delete/message/${id}`, {
+            headers: header
+        })
             .then( (response) => {
                 this.setState(({messages}) => {
                     let newMessages = Object.assign([], messages)

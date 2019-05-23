@@ -1,12 +1,12 @@
 package com.network.controller;
 
-import com.network.component.CurrentUser;
 import com.network.model.User;
 import com.network.repository.UserRepository;
 import com.network.service.FriendService;
 import com.network.service.UserService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,8 +25,7 @@ public class FriendController {
 
     @SneakyThrows
     @GetMapping("/friends/{id}")
-    public Map showFriends(@PathVariable int id) {
-        User currentUser = CurrentUser.user;
+    public Map showFriends(@PathVariable int id, @AuthenticationPrincipal User currentUser) {
         Map<String, Object> model = new HashMap<>();
         User pageUser = userRepository.getById(id);
         if(pageUser == null || !friendService.areFriendsAllowed(pageUser, currentUser))

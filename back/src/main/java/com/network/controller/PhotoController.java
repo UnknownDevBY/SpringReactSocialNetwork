@@ -1,6 +1,5 @@
 package com.network.controller;
 
-import com.network.component.CurrentUser;
 import com.network.dto.PhotoDto;
 import com.network.model.Photo;
 import com.network.model.User;
@@ -26,8 +25,7 @@ public class PhotoController {
 
 
     @GetMapping("/photos/{id}")
-    public Map showPhoto(@PathVariable int id) {
-        User currentUser = CurrentUser.user;
+    public Map showPhoto(@PathVariable int id, @AuthenticationPrincipal User currentUser) {
         Photo photo = photoRepository.getById(id);
         Map<String, Object> model = new HashMap<>();
         User owner = photo.getUser();
@@ -48,8 +46,8 @@ public class PhotoController {
     @ResponseStatus(HttpStatus.OK)
     public void addPhoto(@RequestParam(required = false) Boolean makeAvatar,
                          @RequestParam MultipartFile newPhoto,
-                         @RequestParam(required = false) String album) throws IOException {
-        User currentUser = CurrentUser.user;
+                         @RequestParam(required = false) String album,
+                         @AuthenticationPrincipal User currentUser) throws IOException {
         photoService.savePhoto(makeAvatar, newPhoto, currentUser, null, album);
     }
 }

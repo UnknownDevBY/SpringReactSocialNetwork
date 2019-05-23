@@ -3,7 +3,7 @@ import {Link, withRouter} from 'react-router-dom'
 import axios from 'axios'
 
 import Spinner from "../../Search/Main";
-import {bucketName, backHost} from "../../../../constants";
+import {bucketName, backHost, token} from "../../../../constants";
 
 class Main extends Component {
 
@@ -18,7 +18,13 @@ class Main extends Component {
     }
 
     onClick = (userId) => {
-        axios.get(`${backHost}/users/friendship/${userId}`).then(res => {
+        let header = {}
+        if(token.value)
+            header = {'Authorization': token.value}
+
+        axios.get(`${backHost}/users/friendship/${userId}`, {
+            headers: header
+        }).then(res => {
                 this.props.updateState()
             })
     }

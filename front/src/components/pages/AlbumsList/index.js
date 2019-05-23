@@ -4,7 +4,7 @@ import Header from '../../reused/Header'
 import SideMenu from '../../reused/SideMenu'
 import Main from './Main'
 import axios from "axios";
-import {backHost} from "../../../constants";
+import {backHost, token} from "../../../constants";
 import NewAlbumModal from "./NewAlbumModal";
 
 class AlbumsList extends Component {
@@ -25,7 +25,13 @@ class AlbumsList extends Component {
 
     updateState = () => {
         const {id} = this.props.match.params
-        axios.get(`${backHost}/albums/${id}`)
+        let header = {}
+        if(token.value)
+            header = {'Authorization': token.value}
+
+        axios.get(`${backHost}/albums/${id}`, {
+            headers: header
+        })
             .then( (response) => {
                 this.setState({
                     data: response.data
@@ -39,6 +45,7 @@ class AlbumsList extends Component {
 
     render() {
         const {data} = this.state
+        console.log(data)
 
         return (
             <Fragment>

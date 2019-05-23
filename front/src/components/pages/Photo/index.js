@@ -5,7 +5,7 @@ import {withRouter} from 'react-router-dom'
 import Header from '../../reused/Header'
 import SideMenu from '../../reused/SideMenu'
 import Main from './Main'
-import {backHost} from "../../../constants";
+import {backHost, token} from "../../../constants";
 
 class Photo extends Component {
 
@@ -15,7 +15,13 @@ class Photo extends Component {
 
     updateState = () => {
         const {id} = this.props.match.params
-        axios.get(`${backHost}/photos/${id}`)
+        let header = {}
+        if(token.value)
+            header = {'Authorization': token.value}
+
+        axios.get(`${backHost}/photos/${id}`, {
+            headers: header
+        })
             .then( (response) => {
                 this.setState({
                     data: response.data

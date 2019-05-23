@@ -1,23 +1,34 @@
 import React, {Component, Fragment} from 'react'
+import {withRouter} from 'react-router-dom'
 
 import Header from '../../reused/Header'
 import SideMenu from '../../reused/SideMenu'
 import Main from './Main'
 import axios from "axios";
-import {backHost} from "../../../constants";
+import {backHost, token} from "../../../constants";
 
-export default class News extends Component {
+class News extends Component {
 
     state = {
         data: null
     }
 
     updateState = () => {
-        axios.get(`${backHost}/news`)
+        const {history} = this.props
+        let header = {}
+        if(token.value)
+            header = {'Authorization': token.value}
+
+        axios.get(`${backHost}/news`, {
+            headers: header
+        })
             .then( (response) => {
                 this.setState({
                     data: response.data
                 })
+            })
+            .catch(() => {
+                history.push('/')
             })
     }
 
@@ -37,3 +48,5 @@ export default class News extends Component {
         )
     }
 }
+
+export default News

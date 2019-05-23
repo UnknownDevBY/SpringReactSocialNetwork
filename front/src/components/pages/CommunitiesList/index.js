@@ -6,7 +6,7 @@ import SideMenu from '../../reused/SideMenu'
 import CreateCommunityModal from './CreateCommunityModal'
 import Main from './Main'
 import axios from "axios";
-import {backHost} from "../../../constants";
+import {backHost, token} from "../../../constants";
 
 class Community extends Component {
 
@@ -15,7 +15,13 @@ class Community extends Component {
     }
 
     updateState = () => {
-        axios.get(`${backHost}/communities`)
+        let header = {}
+        if(token.value)
+            header = {'Authorization': token.value}
+
+        axios.get(`${backHost}/communities`, {
+            headers: header
+        })
             .then( (response) => {
                 this.setState({
                     data: response.data

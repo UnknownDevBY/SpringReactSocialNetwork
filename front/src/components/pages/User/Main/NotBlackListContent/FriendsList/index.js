@@ -2,7 +2,7 @@ import React, {Component, Fragment} from 'react'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
 
-import {backHost, bucketName} from '../../../../../../constants'
+import {backHost, bucketName, token} from '../../../../../../constants'
 
 export default class FriendsList extends Component {
 
@@ -11,7 +11,13 @@ export default class FriendsList extends Component {
     }
 
     updateBlackList = (id) => {
-        axios.get(`${backHost}/users/blacklist/${id}`).then(response => {
+        let header = {}
+        if(token.value)
+            header = {'Authorization': token.value}
+
+        axios.get(`${backHost}/users/blacklist/${id}`, {
+            headers: header
+        }).then(response => {
             this.setState(({isInBlacklist}) => {
                 return {
                     isInBlacklist: !isInBlacklist

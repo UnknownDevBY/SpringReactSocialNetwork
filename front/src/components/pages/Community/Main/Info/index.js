@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {Link, withRouter} from 'react-router-dom'
 
-import {backHost, bucketName} from '../../../../../constants'
+import {backHost, bucketName, token} from '../../../../../constants'
 import SideMenu from "../../index";
 
 class Info extends Component {
@@ -27,13 +27,15 @@ class Info extends Component {
             }
         };
         request.open('GET', `${backHost}/communities/public/${id}/subscribe`, true);
+        if(token.value)
+            request.setRequestHeader('Authorization', token.value)
         request.send();
     }
 
     clickOnForms = () => {
         setTimeout(() => {
-            document.getElementById('form34').focus();
-            document.getElementById('form10').focus();
+            document.getElementById('description').focus();
+            document.getElementById('title').focus();
         }, 200);
     }
 

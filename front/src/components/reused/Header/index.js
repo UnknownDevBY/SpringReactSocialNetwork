@@ -1,13 +1,21 @@
 import React, {Component} from 'react'
 import {Link, withRouter} from 'react-router-dom'
 
-import {backHost} from "../../../constants";
+import {backHost, token} from "../../../constants";
+import axios from "axios";
 
 class Header extends Component {
 
     onSubmit = e => {
         e.preventDefault()
-        fetch(`${backHost}/logout`).then(res => {
+        let header = {}
+        if(token.value)
+            header = {'Authorization': token.value}
+
+        fetch(`${backHost}/logout`, {
+            headers: header
+        }).then(res => {
+            token.value = null
             this.props.history.push('/')
         })
     }

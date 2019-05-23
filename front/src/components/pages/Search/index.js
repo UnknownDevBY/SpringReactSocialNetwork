@@ -4,7 +4,7 @@ import Header from '../../reused/Header'
 import SideMenu from '../../reused/SideMenu'
 import Main from './Main'
 import axios from "axios";
-import {backHost} from "../../../constants";
+import {backHost, token} from "../../../constants";
 
 export default class Search extends Component {
 
@@ -13,8 +13,13 @@ export default class Search extends Component {
     }
 
     updateState = () => {
-        axios.get(`${backHost}/search`)
-            .then( (response) => {
+        let header = {}
+        if(token.value)
+            header = {'Authorization': token.value}
+
+        axios.get(`${backHost}/search`, {
+            headers: header
+        }).then( (response) => {
                 this.setState({
                     data: response.data
                 })

@@ -4,7 +4,7 @@ import Header from '../../reused/Header'
 import SideMenu from '../../reused/SideMenu'
 import Main from './Main'
 import axios from "axios";
-import {backHost} from "../../../constants";
+import {backHost, token} from "../../../constants";
 
 class AlbumPhotos extends Component {
 
@@ -13,8 +13,14 @@ class AlbumPhotos extends Component {
     }
 
     updateState = () => {
+        let header = {}
+        if(token.value)
+            header = {'Authorization': token.value}
+
         const {userId, albumId} = this.props.match.params
-        axios.get(`${backHost}/albums/${userId}/${albumId}`)
+        axios.get(`${backHost}/albums/${userId}/${albumId}`, {
+            headers: header
+        })
             .then( (response) => {
                 this.setState({
                     data: response.data

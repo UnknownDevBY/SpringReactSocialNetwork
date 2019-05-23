@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react'
 import axios from 'axios'
-import {backHost} from "../../../constants";
+import {backHost, token} from "../../../constants";
 
 export default class LikeCommentPanel extends Component {
 
@@ -22,7 +22,13 @@ export default class LikeCommentPanel extends Component {
                 }
             })
         }
-        axios.get(`${backHost}/likes/${type}/${id}`).then(res => {
+        let header = {}
+        if(token.value)
+            header = {'Authorization': token.value}
+
+        axios.get(`${backHost}/likes/${type}/${id}`, {
+            headers: header
+        }).then(res => {
             setState()
         })
     }

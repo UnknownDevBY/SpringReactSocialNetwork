@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {Link, withRouter} from 'react-router-dom'
 
-import {formatDate, backHost} from '../../../../../../constants'
+import {formatDate, backHost, token} from '../../../../../../constants'
 import LikeCommentPanel from "../../../../../reused/LikeCommentPanel";
 
 class Posts extends Component {
@@ -53,6 +53,8 @@ class Posts extends Component {
             }
         };
         request.open('GET', `${backHost}/delete/${type}/${id}`, true);
+        if(token.value)
+            request.setRequestHeader('Authorization', token.value)
         request.send();
     }
 
@@ -81,6 +83,8 @@ class Posts extends Component {
             };
             request.open('POST', `${backHost}/users/${id}`);
             request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            if(token.value)
+                request.setRequestHeader('Authorization', token.value)
             request.send(params);
         }
     }
@@ -113,6 +117,8 @@ class Posts extends Component {
             };
             request.open('POST', `${backHost}/comment/post/${postId}`);
             request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            if(token.value)
+                request.setRequestHeader('Authorization', token.value)
             request.send(params);
         }
     }

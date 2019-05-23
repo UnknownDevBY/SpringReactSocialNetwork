@@ -1,7 +1,7 @@
 import React, {Component, Fragment} from 'react'
 import {withRouter, Redirect} from 'react-router-dom'
 
-import {backHost} from '../../../../constants'
+import {backHost, token} from '../../../../constants'
 
 class EditModal extends Component {
 
@@ -58,10 +58,13 @@ class EditModal extends Component {
             if (this.readyState === 4) {
                 if(this.status === 200) {
                     updateState()
+                    document.getElementById('closeModal').click()
                 }
             }
         };
         request.open('POST', `${backHost}/communities/public/${id}/edit`);
+        if(token.value)
+            request.setRequestHeader('Authorization', token.value)
         request.send(params);
     }
 
@@ -89,7 +92,7 @@ class EditModal extends Component {
                                     <div className="modal-content">
                                         <div className="modal-header text-center">
                                             <h4 className="modal-title w-100 font-weight-bold">Редактировать группу</h4>
-                                            <button type="button" className="close" data-dismiss="modal" aria-label="Close"
+                                            <button type="button" id="closeModal" className="close" data-dismiss="modal" aria-label="Close"
                                                     onClick={this.resetForm}>
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
@@ -112,19 +115,19 @@ class EditModal extends Component {
                                         <div className="modal-body mx-3">
                                             <div className="md-form mb-5">
                                                 <i className="fas fa-user prefix grey-text"></i>
-                                                <input defaultValue={community.title} type="text" id="form34" name="title"
-                                                       minLength="2" maxLength="63" required="required"
+                                                <input defaultValue={community.title} type="text" id="title" name="title"
+                                                       minLength={2} maxLength={63} required={true}
                                                        className="form-control validate" />
                                                     <label data-error="wrong" data-success="right"
-                                                           htmlFor="form34">Название</label>
+                                                           htmlFor="title">Название</label>
                                             </div>
                                             <div className="md-form">
                                                 <i className="fas fa-info prefix grey-text"></i>
-                                                <textarea type="text" id="form10"
+                                                <textarea type="text" id="description"
                                                           name="description" className="md-textarea form-control" rows="4"
                                                           minLength="1" maxLength="255">{community.description}</textarea>
                                                 <label data-error="wrong" data-success="right"
-                                                       htmlFor="form10">Описание</label>
+                                                       htmlFor="description">Описание</label>
                                             </div>
                                             <div className="text-center w-100">
                                                 <div title="Доступна всем"

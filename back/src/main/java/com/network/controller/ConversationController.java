@@ -1,12 +1,12 @@
 package com.network.controller;
 
-import com.network.component.CurrentUser;
 import com.network.model.Message;
 import com.network.model.User;
 import com.network.repository.MessageRepository;
 import com.network.service.ConversationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,8 +21,7 @@ public class ConversationController {
     @Autowired private ConversationService conversationService;
 
     @GetMapping("/conversations/{id}")
-    public Map openConversation(@PathVariable int id) {
-        User currentUser = CurrentUser.user;
+    public Map openConversation(@PathVariable int id, @AuthenticationPrincipal User currentUser) {
         Map<String, Object> model = new HashMap<>();
         model.put("currentUser", currentUser);
         model.put("opponent", conversationService.getOpponent(id));
@@ -33,8 +32,8 @@ public class ConversationController {
     @PostMapping("/conversations/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Message sendMessage(@PathVariable int id,
-                               @Valid @RequestParam @NotBlank String content) {
-        User currentUser = CurrentUser.user;
+                               @Valid @RequestParam @NotBlank String content,
+                               @AuthenticationPrincipal User currentUser) {
         return conversationService.saveMessage(id, currentUser, content);
     }
 }

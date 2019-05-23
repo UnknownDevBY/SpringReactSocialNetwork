@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {Link, withRouter, Redirect} from 'react-router-dom'
 
 import Spinner from '../../../Spinner'
-import {backHost, bucketName, formatDate} from "../../../../constants";
+import {backHost, bucketName, formatDate, token} from "../../../../constants";
 import LikeCommentPanel from '../../../reused/LikeCommentPanel'
 
 class Main extends Component {
@@ -26,6 +26,8 @@ class Main extends Component {
             }
         };
         request.open('GET', `${backHost}/delete/${type}/${objId}`, true);
+        if(token.value)
+            request.setRequestHeader('Authorization', token.value)
         request.send();
     }
 
@@ -46,6 +48,8 @@ class Main extends Component {
             }
         };
         request.open('GET', `${backHost}/delete/photo/${id}`, true);
+        if(token.value)
+            request.setRequestHeader('Authorization', token.value)
         request.send();
     }
 
@@ -76,6 +80,8 @@ class Main extends Component {
             };
             request.open('POST', `${backHost}/comment/photo/${postId}`);
             request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            if(token.value)
+                request.setRequestHeader('Authorization', token.value)
             request.send(params);
         }
     }
@@ -148,7 +154,7 @@ class Main extends Component {
                             <span>{formatDate(photo.photo.dateOfPost)}</span>
                         </p>
                         <div className="like-comment-amount">
-                            <LikeCommentPanel id={photo.photo.id} data={photo} type={'photo'}/>
+                            <LikeCommentPanel id={photo.photo.id} data={photo} currentUser={currentUser}  type={'photo'}/>
                         </div>
                         {
                             comments != null ? (

@@ -5,7 +5,7 @@ import Header from '../../reused/Header'
 import SideMenu from '../../reused/SideMenu'
 import Main from './Main'
 import axios from "axios";
-import {backHost} from "../../../constants";
+import {backHost, token} from "../../../constants";
 
 class Conversation extends Component {
 
@@ -15,7 +15,13 @@ class Conversation extends Component {
 
     updateState = () => {
         const {id} = this.props.match.params
-        axios.get(`${backHost}/conversations/${id}`)
+        let header = {}
+        if(token.value)
+            header = {'Authorization': token.value}
+
+        axios.get(`${backHost}/conversations/${id}`, {
+            headers: header
+        })
             .then( (response) => {
                 this.setState({
                     data: response.data

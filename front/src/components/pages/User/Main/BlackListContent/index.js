@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import axios from 'axios'
 
-import {bucketName, backHost} from '../../../../../constants'
+import {bucketName, backHost, token} from '../../../../../constants'
 
 export default class BlackListContent extends Component {
 
@@ -10,7 +10,13 @@ export default class BlackListContent extends Component {
     }
 
     onBlackListUpdated = (id) => {
-        axios.get(`${backHost}/users/blacklist/${id}`).then(response => {
+        let header = {}
+        if(token.value)
+            header = {'Authorization': token.value}
+
+        axios.get(`${backHost}/users/blacklist/${id}`, {
+            headers: header
+        }).then(response => {
             this.setState(({isInBlacklist}) => {
                 return {
                     isInBlacklist: !isInBlacklist

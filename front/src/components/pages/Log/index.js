@@ -2,7 +2,7 @@ import React, {Component, Fragment} from 'react'
 import axios from "axios";
 import {withRouter} from 'react-router-dom'
 
-import {backHost, formatDate} from "../../../constants";
+import {backHost, formatDate, token} from "../../../constants";
 import Spinner from '../../Spinner'
 
 class User extends Component {
@@ -12,7 +12,13 @@ class User extends Component {
     }
 
     updateState = () => {
-        axios.get(`${backHost}/log`)
+        let header = {}
+        if(token.value)
+            header = {'Authorization': token.value}
+
+        axios.get(`${backHost}/log`, {
+            headers: header
+        })
             .then( (response) => {
                 this.setState({
                     data: response.data

@@ -4,7 +4,7 @@ import axios from "axios";
 import Header from '../../reused/Header'
 import SideMenu from '../../reused/SideMenu'
 import Main from './Main'
-import {backHost} from "../../../constants";
+import {backHost, token} from "../../../constants";
 
 class Edit extends Component {
 
@@ -13,7 +13,13 @@ class Edit extends Component {
     }
 
     updateState = () => {
-        axios.get(`${backHost}/edit`)
+        let header = {}
+        if(token.value)
+            header = {'Authorization': token.value}
+
+        axios.get(`${backHost}/edit`, {
+            headers: header
+        })
             .then( (response) => {
                 this.setState({
                     data: response.data

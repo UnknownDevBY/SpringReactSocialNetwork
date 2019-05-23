@@ -6,7 +6,7 @@ import SideMenu from '../../reused/SideMenu'
 import Main from './Main'
 import EditModal from './EditModal'
 import axios from "axios";
-import {backHost} from "../../../constants";
+import {backHost, token} from "../../../constants";
 
 class Community extends Component {
 
@@ -16,7 +16,13 @@ class Community extends Component {
 
     updateState = () => {
         const {id} = this.props.match.params
-        axios.get(`${backHost}/communities/public/${id}`)
+        let header = {}
+        if(token.value)
+            header = {'Authorization': token.value}
+
+        axios.get(`${backHost}/communities/public/${id}`, {
+            headers: header
+        })
             .then( (response) => {
                 this.setState({
                     data: response.data
@@ -35,7 +41,7 @@ class Community extends Component {
             <Fragment>
                 <Header updateState={this.updateState} data={data}/>
                 <SideMenu updateState={this.updateState} data={data}/>
-                <EditModal data={data}/>
+                <EditModal updateState={this.updateState} data={data}/>
                 <Main updateState={this.updateState} data={data}/>
             </Fragment>
         )

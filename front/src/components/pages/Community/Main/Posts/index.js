@@ -2,7 +2,7 @@ import React, {Component, Fragment} from 'react'
 import {Link, withRouter} from 'react-router-dom'
 
 import LikeCommentPanel from '../../../../reused/LikeCommentPanel'
-import {backHost, bucketName, formatDate} from "../../../../../constants";
+import {backHost, bucketName, formatDate, token} from "../../../../../constants";
 
 class Posts extends Component {
 
@@ -53,6 +53,8 @@ class Posts extends Component {
             }
         };
         request.open('GET', `${backHost}/delete/${type}/${id}`, true);
+        if(token.value)
+            request.setRequestHeader('Authorization', token.value)
         request.send();
     }
 
@@ -84,6 +86,8 @@ class Posts extends Component {
             };
             request.open('POST', `${backHost}/comment/post/${postId}`);
             request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            if(token.value)
+                request.setRequestHeader('Authorization', token.value)
             request.send(params);
         }
     }
@@ -110,8 +114,11 @@ class Posts extends Component {
                     setState(JSON.parse(request.response))
                 }
             };
+            document.getElementById('form7').value = ''
             request.open('POST', `${backHost}/communities/public/${id}`);
             request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            if(token.value)
+                request.setRequestHeader('Authorization', token.value)
             request.send(params);
         }
     }

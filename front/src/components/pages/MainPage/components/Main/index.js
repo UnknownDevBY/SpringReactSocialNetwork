@@ -1,37 +1,28 @@
 import React, {Component} from 'react'
-import {Redirect} from 'react-router-dom'
+import {withRouter} from 'react-router-dom'
 
-import {backHost} from '../../../../../constants'
+import {backHost, token} from '../../../../../constants'
 
-export default class Main extends Component {
-
-    state = {
-        redirect: false
-    }
+class Main extends Component {
 
     login = (e) => {
         e.preventDefault()
         const login = document.getElementById("itech_login").value;
         const password = document.getElementById("itech_pass").value;
+        const {history} = this.props
         fetch(`${backHost}/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
             body: `itech_login=${login}&itech_pass=${password}`
-        }).then(res => {
-            if(res.ok)
-                this.setState({
-                    redirect: true
-                })
+        }).then(res => res.json()).then(data => {
+            token.value = data.token
+            history.push('/search')
         })
     }
 
     render() {
-
-        if(this.state.redirect)
-            return <Redirect to='/search'/>
-
         return (
             <main className="main-header mt-5">
                 <div className="container">
@@ -86,3 +77,5 @@ export default class Main extends Component {
         )
     }
 }
+
+export default withRouter(Main)

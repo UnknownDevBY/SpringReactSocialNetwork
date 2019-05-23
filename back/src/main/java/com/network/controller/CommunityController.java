@@ -1,6 +1,5 @@
 package com.network.controller;
 
-import com.network.component.CurrentUser;
 import com.network.dto.CommunityDto;
 import com.network.dto.PostDto;
 import com.network.model.Community;
@@ -35,8 +34,7 @@ public class CommunityController {
     @Autowired private CommunitySubscriberRepository communitySubscriberRepository;
 
     @GetMapping("/communities")
-    public Map show(@RequestParam(required = false) String value) {
-        User currentUser = CurrentUser.user;
+    public Map show(@RequestParam(required = false) String value, @AuthenticationPrincipal User currentUser) {
         Map<String, Object> model = new HashMap<>();
         List<CommunityDto> myCommunities = communityService.findCommunitiesByUserSubscribed(value, currentUser);
         List<CommunityDto> adminCommunities = communityService.getCommunitiesWhereUserIsAdmin(value, currentUser);
@@ -48,8 +46,7 @@ public class CommunityController {
     }
 
     @GetMapping("/communities/public/{id}")
-    public Map showPublic(@PathVariable int id) {
-        User currentUser = CurrentUser.user;
+    public Map showPublic(@PathVariable int id, @AuthenticationPrincipal User currentUser) {
         Map<String, Object> model = new HashMap<>();
         if(!communityRepository.existsById(id))
             return null;
@@ -67,24 +64,23 @@ public class CommunityController {
 
     @GetMapping("/communities/public/{communityId}/subscribe")
     @ResponseStatus(HttpStatus.OK)
-    public void subscribe(@PathVariable int communityId) {
-        User currentUser = CurrentUser.user;
+    public void subscribe(@PathVariable int communityId, @AuthenticationPrincipal User currentUser) {
         communityService.updateSubscription(communityId, currentUser);
     }
 
     @GetMapping("/communities/public/{communityId}/subscription/{userId}/confirm")
     @ResponseStatus(HttpStatus.OK)
     public void confirmSubscription(@PathVariable int communityId,
-                                    @PathVariable int userId) {
-        User currentUser = CurrentUser.user;
+                                    @PathVariable int userId,
+                                    @AuthenticationPrincipal User currentUser) {
         communityService.confirmSubscription(communityId, userId, currentUser);
     }
 
     @PostMapping(value = "/communities/create", consumes = "multipart/form-data")
     @ResponseStatus(HttpStatus.OK)
     public void createCommunity(@Valid @ModelAttribute Community community,
-                       @RequestParam(required = false) MultipartFile avatar) throws IOException {
-        User currentUser = CurrentUser.user;
+                                @RequestParam(required = false) MultipartFile avatar,
+                                @AuthenticationPrincipal User currentUser) throws IOException {
         communityService.createCommunity(community, currentUser);
         photoService.savePhoto(true, avatar, null, community, null);
     }
@@ -92,18 +88,17 @@ public class CommunityController {
     @PostMapping("/communities/public/{id}")
     @ResponseStatus(HttpStatus.OK)
     public PostDto createPost(@PathVariable int id,
-                              @Valid @RequestParam @NotBlank String content) {
-        User currentUser = CurrentUser.user;
+                              @Valid @RequestParam @NotBlank String content,
+                              @AuthenticationPrincipal User currentUser) {
         return userService.savePost(id, content, currentUser, communityRepository.getById(id));
     }
 
     @PostMapping(value = "/communities/public/{id}/edit", consumes = "multipart/form-data")
-    public String editCommunity(@PathVariable int id,
+    public void editCommunity(@PathVariable int id,
                               @Valid @ModelAttribute Community community,
-                              @RequestParam(required = false) MultipartFile avatar) throws IOException {
-        User currentUser = CurrentUser.user;
+                              @RequestParam(required = false) MultipartFile avatar,
+                                @AuthenticationPrincipal User currentUser) throws IOException {
         communityService.editCommunity(id, community, currentUser);
         photoService.savePhoto(true, avatar, null, community, null);
-        return "redirect:/communities/public/" + id;
     }
 }

@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {backHost} from "../../../../constants";
+import {backHost, token} from "../../../../constants";
 import {withRouter} from 'react-router-dom'
 
 class NewAlbumModal extends Component {
@@ -20,6 +20,8 @@ class NewAlbumModal extends Component {
             };
             request.open('POST', `${backHost}/albums/add`);
             request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            if(token.value)
+                request.setRequestHeader('Authorization', token.value)
             request.send(params);
         }
     }

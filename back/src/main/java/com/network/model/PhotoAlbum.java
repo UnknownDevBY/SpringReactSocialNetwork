@@ -25,7 +25,7 @@ public class PhotoAlbum {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @JsonIgnore
+    //@JsonIgnore
     @OneToMany(mappedBy = "photoAlbum")
     private List<Photo> photos;
 

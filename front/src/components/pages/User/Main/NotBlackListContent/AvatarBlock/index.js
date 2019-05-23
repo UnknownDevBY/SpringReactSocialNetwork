@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import axios from 'axios'
 import {Link} from 'react-router-dom'
 
-import {bucketName, backHost} from '../../../../../../constants'
+import {bucketName, backHost, token} from '../../../../../../constants'
 
 export default class AvatarBlock extends Component {
 
@@ -12,7 +12,13 @@ export default class AvatarBlock extends Component {
 
     onFriendshipUpdated = (e, id) => {
         e.preventDefault()
-        axios.get(`${backHost}/users/friendship/${id}`).then(response => {
+        let header = {}
+        if(token.value)
+            header = {'Authorization': token.value}
+
+        axios.get(`${backHost}/users/friendship/${id}`, {
+            headers: header
+        }).then(response => {
             this.setState(({is1friendTo2}) => {
                 return {
                     is1friendTo2: !is1friendTo2

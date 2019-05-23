@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 
-import {backHost} from '../../../../constants'
+import {backHost, token} from '../../../../constants'
 
 class CreateCommunityModal extends Component {
 
@@ -60,6 +60,8 @@ class CreateCommunityModal extends Component {
             }
         };
         request.open('POST', `${backHost}/communities/create`);
+        if(token.value)
+            request.setRequestHeader('Authorization', token.value)
         request.send(params);
     }
 

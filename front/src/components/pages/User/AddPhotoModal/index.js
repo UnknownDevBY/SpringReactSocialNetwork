@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 
-import {backHost} from '../../../../constants'
+import {backHost, token} from '../../../../constants'
 
 class AddPhotoModal extends Component {
 
@@ -42,7 +42,6 @@ class AddPhotoModal extends Component {
         const makeAvatar = document.getElementById('makeAvatar')
         if(makeAvatar.checked)
             params.append('makeAvatar', makeAvatar.value)
-        console.log(params)
         const updateStateSuccess = this.props.updateState
         request.onreadystatechange = function() {
             if (this.readyState === 4 && this.status === 200) {
@@ -51,7 +50,8 @@ class AddPhotoModal extends Component {
             }
         };
         request.open('POST', `${backHost}/photos/add`);
-        //request.setRequestHeader('Content-Type', 'multipart/form-data; boundary=B0EC8D07-EBF1-4EA7-966C-E492A9F2C36E');
+        if(token.value)
+            request.setRequestHeader('Authorization', token.value)
         request.send(params);
     }
 

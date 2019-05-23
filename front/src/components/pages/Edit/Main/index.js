@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {Redirect} from 'react-router-dom'
 
 import Spinner from '../../../Spinner'
-import {backHost} from "../../../../constants";
+import {backHost, token} from "../../../../constants";
 
 
 class Main extends Component {
@@ -15,6 +15,81 @@ class Main extends Component {
             item = groupBlocks.item(i);
             item.hidden = !item.getAttribute('name').toLowerCase().startsWith(text);
         }
+    }
+
+    editUser = e => {
+        e.preventDefault()
+        let request = new XMLHttpRequest();
+
+        let name = document.getElementById("name").value.trim();
+        let surname = document.getElementById("surname").value.trim();
+        let city = document.getElementById("city").value.trim();
+        let pass = document.getElementById("pass").value.trim();
+        let sex = document.querySelector('input[name="sex"]:checked').value;
+        let dateOfBirth = document.getElementById("dateOfBirth").value.trim();
+        let bio = document.getElementById("bio").value.trim();
+        let interests = document.getElementById("interests").value.trim();
+
+        let params = new FormData()
+        params.append('name', name)
+        params.append('surname', surname)
+        params.append('city', city)
+        params.append('sex', sex)
+        params.append('dateOfBirth', dateOfBirth)
+        params.append('bio', bio)
+        params.append('interests', interests)
+        if(pass && pass.length >= 6)
+            params.append('pass', pass)
+
+        request.onreadystatechange = function() {
+            if (this.readyState === 4) {
+                if(this.status === 200) {
+                    alert('Изменения успешно сохранены')
+                }
+            }
+        };
+        request.open('POST', `${backHost}/edit`);
+        if(token.value)
+            request.setRequestHeader('Authorization', token.value)
+        request.send(params);
+    }
+
+    editPrivacySettings = e => {
+        e.preventDefault()
+        let request = new XMLHttpRequest();
+
+        let messages = document.getElementById("messages")
+        messages = messages[messages.selectedIndex].value
+        let fullInfo = document.getElementById("fullInfo")
+        fullInfo = fullInfo[fullInfo.selectedIndex].value
+        let photos = document.getElementById("photos")
+        photos = photos[photos.selectedIndex].value
+        let friends = document.getElementById("friends")
+        friends = friends[friends.selectedIndex].value
+        let postAuthors = document.getElementById("postAuthors")
+        postAuthors = postAuthors[postAuthors.selectedIndex].value
+        let comments = document.getElementById("comments")
+        comments = comments[comments.selectedIndex].value
+
+        let params = new FormData()
+        params.append("messages", messages)
+        params.append("fullInfo", fullInfo)
+        params.append("photos", photos)
+        params.append("friends", friends)
+        params.append("postAuthors", postAuthors)
+        params.append("comments", comments)
+
+        request.onreadystatechange = function() {
+            if (this.readyState === 4) {
+                if(this.status === 200) {
+                    alert('Изменения успешно сохранены')
+                }
+            }
+        };
+        request.open('POST', `${backHost}/privacy-settings`);
+        if(token.value)
+            request.setRequestHeader('Authorization', token.value)
+        request.send(params);
     }
 
     render() {
@@ -56,7 +131,7 @@ class Main extends Component {
                                 <div className="tab-content">
                                     <div className="tab-pane fade show active" id="home" role="tabpanel"
                                          aria-labelledby="home-tab">
-                                        <form action={`${backHost}/edit`} onSubmit={e => e.preventDefault()} method="post">
+                                        <form onSubmit={this.editUser}>
                                             <label htmlFor="name">Имя</label>
                                             <div>
                                                 <input defaultValue={currentUser.name} type="text" id="name" name="name" minLength="3" maxLength="31" required="required"/>
@@ -101,9 +176,9 @@ class Main extends Component {
                                     </div>
                                     <div className="tab-pane fade" id="profile" role="tabpanel"
                                          aria-labelledby="profile-tab">
-                                        <form action={`${backHost}/privacy-settings`} onSubmit={e => e.preventDefault()} method="post">
+                                        <form onSubmit={this.editPrivacySettings}>
                                             <div className="privacy-option">
-                                                <label htmlFor="fullInfo">Кто может писать мне сообщения?</label>
+                                                <label htmlFor="messages">Кто может писать мне сообщения?</label>
                                                 <select name="messages" id="messages" required="required">
                                                     <option value="a" selected={curPrivSet == null || curPrivSet.messages === 'a'}>Все</option>
                                                     <option value="f" selected={curPrivSet != null && curPrivSet.messages === 'f'}>Только друзья</option>
